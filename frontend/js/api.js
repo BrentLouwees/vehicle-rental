@@ -19,7 +19,7 @@ const API_BASE = 'https://vehicle-rental-production-0285.up.railway.app/api/v1';
  * @param {Object|null} body  JSON body for POST/PUT
  * @returns {Promise<any>}  parsed JSON response
  */
-async function apiFetch(method, path, body = null) {
+async function apiFetch(method, path, body = null, { skipAuthRedirect = false } = {}) {
   const token = localStorage.getItem('token');
 
   const headers = {
@@ -49,7 +49,7 @@ async function apiFetch(method, path, body = null) {
   }
 
   // Handle 401 — token expired or invalid
-  if (response.status === 401) {
+  if (response.status === 401 && !skipAuthRedirect) {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     window.location.href = '/pages/login.html';
@@ -83,7 +83,7 @@ async function apiFetch(method, path, body = null) {
 ───────────────────────────────────────────────────────────── */
 
 async function loginUser(email, password) {
-  return apiFetch('POST', '/auth/login', { email, password });
+  return apiFetch('POST', '/auth/login', { email, password }, { skipAuthRedirect: true });
 }
 
 async function registerUser(full_name, email, phone, password) {
