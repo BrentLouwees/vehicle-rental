@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vehicle Management — DriveEasy Admin</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/responsive.css" />
+</head>
+<body data-page="admin-vehicles">
+
+  <!-- ── NAVIGATION ──────────────────────────────────────── -->
+  <header>
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+      <div class="container">
+        <a href="/index.html" class="navbar-brand" aria-label="DriveEasy home">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+          </svg>
+          DriveEasy <span style="font-size:0.75rem;opacity:0.7;font-weight:400;">Admin</span>
+        </a>
+        <div class="nav-links">
+          <!-- Avatar + dropdown (populated by auth.js) -->
+          <div class="nav-user" data-auth="loggedIn" style="display:none"></div>
+        </div>
+        <button class="hamburger" id="hamburger-btn" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+      <div class="admin-top-nav" role="navigation" aria-label="Admin navigation">
+        <a href="/pages/admin/dashboard.html">Dashboard</a>
+        <a href="/pages/admin/bookings.html">Bookings</a>
+        <a href="/pages/admin/vehicles.html" class="active">Vehicles</a>
+        <a href="/pages/admin/reports.html" data-manager-only>Reports</a>
+      </div>
+
+      <div class="mobile-menu" id="mobile-menu">
+        <a href="/pages/admin/dashboard.html">Dashboard</a>
+        <a href="/pages/admin/bookings.html">Bookings</a>
+        <a href="/pages/admin/vehicles.html">Vehicles</a>
+        <a href="/pages/admin/reports.html" data-manager-only>Reports</a>
+        <hr class="divider" />
+        <a href="/pages/profile.html">Profile</a>
+        <button class="btn btn-secondary" data-action="logout">Log Out</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <div class="container">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--spacing-sm);">
+          <div>
+            <h1 class="page-title">Vehicle Inventory</h1>
+            <p class="text-muted" style="margin-top:4px;">Add, edit, and manage all fleet vehicles.</p>
+          </div>
+          <button id="add-vehicle-btn" class="btn btn-primary">
+            + Add Vehicle
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container py-lg">
+      <div class="table-wrapper">
+        <table class="table" aria-label="Vehicle inventory">
+          <thead>
+            <tr>
+              <th scope="col">Plate</th>
+              <th scope="col">Vehicle</th>
+              <th scope="col">Type</th>
+              <th scope="col">Location</th>
+              <th scope="col">Daily Rate</th>
+              <th scope="col">Status</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="vehicles-table-body">
+            <tr>
+              <td colspan="7">
+                <div class="spinner-overlay" role="status" aria-label="Loading vehicles">
+                  <div class="spinner"></div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- ── ADD / EDIT VEHICLE MODAL ─────────────────────────── -->
+  <div class="modal-overlay hidden" id="vehicle-modal" role="dialog" aria-modal="true" aria-labelledby="vehicle-modal-title">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="vehicle-modal-title">Add New Vehicle</h3>
+        <button class="modal-close" data-close-modal="vehicle-modal" aria-label="Close dialog">×</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="vehicle-form" novalidate aria-label="Vehicle form">
+
+          <div class="grid-2">
+            <!-- Plate -->
+            <div class="form-group">
+              <label for="vehicle-plate">
+                Plate Number <span class="required" aria-hidden="true">*</span>
+              </label>
+              <input type="text" id="vehicle-plate" placeholder="e.g. ABC-1234" required aria-required="true" />
+              <span class="field-error" id="vehicle-plate-error" role="alert"></span>
+            </div>
+
+            <!-- Year -->
+            <div class="form-group">
+              <label for="vehicle-year">Year</label>
+              <input type="number" id="vehicle-year" placeholder="e.g. 2023" min="1980" max="2030" />
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <!-- Brand -->
+            <div class="form-group">
+              <label for="vehicle-brand">
+                Brand <span class="required" aria-hidden="true">*</span>
+              </label>
+              <input type="text" id="vehicle-brand" placeholder="e.g. Toyota" required aria-required="true" />
+              <span class="field-error" id="vehicle-brand-error" role="alert"></span>
+            </div>
+
+            <!-- Model -->
+            <div class="form-group">
+              <label for="vehicle-model">
+                Model <span class="required" aria-hidden="true">*</span>
+              </label>
+              <input type="text" id="vehicle-model" placeholder="e.g. Camry" required aria-required="true" />
+              <span class="field-error" id="vehicle-model-error" role="alert"></span>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <!-- Type -->
+            <div class="form-group">
+              <label for="vehicle-type">
+                Type <span class="required" aria-hidden="true">*</span>
+              </label>
+              <select id="vehicle-type" required aria-required="true">
+                <option value="">Select type</option>
+                <option value="car">Car</option>
+                <option value="motorcycle">Motorcycle</option>
+                <option value="suv">SUV</option>
+                <option value="van">Van</option>
+                <option value="truck">Truck</option>
+              </select>
+              <span class="field-error" id="vehicle-type-error" role="alert"></span>
+            </div>
+
+            <!-- Transmission -->
+            <div class="form-group">
+              <label for="vehicle-transmission">Transmission</label>
+              <select id="vehicle-transmission">
+                <option value="">Select</option>
+                <option value="automatic">Automatic</option>
+                <option value="manual">Manual</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <!-- Fuel Type -->
+            <div class="form-group">
+              <label for="vehicle-fuel">Fuel Type</label>
+              <select id="vehicle-fuel">
+                <option value="">Select</option>
+                <option value="petrol">Petrol</option>
+                <option value="diesel">Diesel</option>
+                <option value="electric">Electric</option>
+                <option value="hybrid">Hybrid</option>
+              </select>
+            </div>
+
+            <!-- Seats -->
+            <div class="form-group">
+              <label for="vehicle-seats">Seats</label>
+              <input type="number" id="vehicle-seats" placeholder="e.g. 5" min="1" max="20" />
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <!-- Daily Rate -->
+            <div class="form-group">
+              <label for="vehicle-rate">
+                Daily Rate ($) <span class="required" aria-hidden="true">*</span>
+              </label>
+              <input type="number" id="vehicle-rate" placeholder="e.g. 75.00" min="0" step="0.01" required aria-required="true" />
+              <span class="field-error" id="vehicle-rate-error" role="alert"></span>
+            </div>
+
+            <!-- Location -->
+            <div class="form-group">
+              <label for="vehicle-location">
+                Location <span class="required" aria-hidden="true">*</span>
+              </label>
+              <select id="vehicle-location" required aria-required="true">
+                <option value="">Select location</option>
+              </select>
+              <span class="field-error" id="vehicle-location-error" role="alert"></span>
+            </div>
+          </div>
+
+          <!-- Status -->
+          <div class="form-group">
+            <label for="vehicle-status">Status</label>
+            <select id="vehicle-status">
+              <option value="available">Available</option>
+              <option value="maintenance">Maintenance</option>
+              <option value="retired">Retired</option>
+            </select>
+          </div>
+
+          <!-- Image URL -->
+          <div class="form-group">
+            <label for="vehicle-image">Image URL</label>
+            <input type="url" id="vehicle-image" placeholder="https://..." />
+          </div>
+
+          <!-- Description -->
+          <div class="form-group">
+            <label for="vehicle-description">Description</label>
+            <textarea id="vehicle-description" placeholder="Brief vehicle description..." rows="3"></textarea>
+          </div>
+
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal="vehicle-modal">Cancel</button>
+        <button type="submit" form="vehicle-form" class="btn btn-primary">Save Vehicle</button>
+      </div>
+    </div>
+  </div>
+
+  <footer role="contentinfo">
+    <div class="container">
+      <div class="footer-brand">DriveEasy Admin</div>
+      <p class="footer-copy">&copy; 2026 DriveEasy. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/utils.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

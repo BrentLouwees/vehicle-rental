@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search Vehicles — DriveEasy</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/responsive.css" />
+</head>
+<body data-page="search">
+
+  <!-- ── NAVIGATION ──────────────────────────────────────── -->
+  <header>
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+      <div class="container">
+        <a href="/index.html" class="navbar-brand" aria-label="DriveEasy home">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+          </svg>
+          DriveEasy
+        </a>
+        <div class="nav-links">
+          <a href="/pages/search.html" class="active">Browse Vehicles</a>
+          <a href="/pages/my-bookings.html" data-auth="loggedIn" style="display:none">My Bookings</a>
+          <a href="/pages/admin/dashboard.html" data-auth-role="staff,manager" style="display:none">Admin</a>
+          <div data-auth="loggedOut" style="display:flex;gap:8px;">
+            <a href="/pages/login.html"    class="btn btn-secondary btn-sm">Log In</a>
+            <a href="/pages/register.html" class="btn btn-primary   btn-sm">Sign Up</a>
+          </div>
+          <!-- Avatar + dropdown (populated by auth.js) -->
+          <div class="nav-user" data-auth="loggedIn" style="display:none"></div>
+        </div>
+        <button class="hamburger" id="hamburger-btn" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="mobile-menu" id="mobile-menu">
+        <a href="/pages/search.html">Browse Vehicles</a>
+        <a href="/pages/my-bookings.html" data-mobile-auth="loggedIn" style="display:none">My Bookings</a>
+        <a href="/pages/admin/dashboard.html" data-mobile-auth-role="staff,manager" style="display:none">Admin</a>
+        <a href="/pages/profile.html" data-mobile-auth="loggedIn" style="display:none">Profile</a>
+        <div data-mobile-auth="loggedOut" style="display:flex;flex-direction:column;gap:8px;">
+          <a href="/pages/login.html" class="btn btn-secondary">Log In</a>
+          <a href="/pages/register.html" class="btn btn-primary">Sign Up</a>
+        </div>
+        <button class="btn btn-secondary" data-action="logout" data-mobile-auth="loggedIn" style="display:none">Log Out</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <div class="container">
+        <div class="breadcrumb">
+          <a href="/index.html">Home</a>
+          <span class="sep">/</span>
+          <span>Search Vehicles</span>
+        </div>
+        <h1 class="page-title">Browse Vehicles</h1>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="search-layout" id="search-layout">
+
+        <!-- ── FILTER SIDEBAR ──────────────────────────── -->
+        <aside class="filter-sidebar" aria-label="Filter vehicles">
+          <h3>Filter Results</h3>
+
+          <form id="filter-form" aria-label="Search filters">
+            <!-- Vehicle Type -->
+            <div class="filter-section">
+              <h4>Vehicle Type</h4>
+              <div class="form-group" style="margin-bottom:0;">
+                <select id="filter-type" aria-label="Vehicle type">
+                  <option value="">All Types</option>
+                  <option value="car">Car</option>
+                  <option value="motorcycle">Motorcycle</option>
+                  <option value="suv">SUV</option>
+                  <option value="van">Van</option>
+                  <option value="truck">Truck</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Location -->
+            <div class="filter-section">
+              <h4>Location</h4>
+              <div class="form-group" style="margin-bottom:0;">
+                <select id="filter-location" aria-label="Pickup location">
+                  <option value="">Any Location</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Transmission -->
+            <div class="filter-section">
+              <h4>Transmission</h4>
+              <div class="form-group" style="margin-bottom:0;">
+                <select id="filter-transmission" aria-label="Transmission type">
+                  <option value="">Any</option>
+                  <option value="automatic">Automatic</option>
+                  <option value="manual">Manual</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Price Range -->
+            <div class="filter-section">
+              <h4>Daily Rate</h4>
+              <div class="price-range-inputs">
+                <input
+                  type="number"
+                  id="filter-min-price"
+                  placeholder="Min $"
+                  min="0"
+                  step="5"
+                  aria-label="Minimum daily rate"
+                />
+                <span aria-hidden="true">—</span>
+                <input
+                  type="number"
+                  id="filter-max-price"
+                  placeholder="Max $"
+                  min="0"
+                  step="5"
+                  aria-label="Maximum daily rate"
+                />
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Apply Filters</button>
+            <button type="button" id="reset-filters" class="btn btn-secondary btn-block mt-sm">
+              Reset Filters
+            </button>
+          </form>
+        </aside>
+
+        <!-- ── RESULTS AREA ────────────────────────────── -->
+        <section aria-label="Search results">
+          <div class="results-header">
+            <span class="results-count" id="results-count" aria-live="polite">Loading...</span>
+          </div>
+
+          <div id="vehicles-grid">
+            <!-- Populated by app.js: fetchAndRenderVehicles() -->
+            <div class="spinner-overlay" role="status" aria-label="Loading vehicles">
+              <div class="spinner"></div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container">
+      <div class="footer-brand">DriveEasy</div>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="/index.html">Home</a>
+        <a href="/pages/search.html">Browse</a>
+        <a href="/pages/login.html">Login</a>
+      </nav>
+      <p class="footer-copy">&copy; 2026 DriveEasy. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/utils.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

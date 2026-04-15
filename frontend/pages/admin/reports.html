@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reports — DriveEasy Admin</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/responsive.css" />
+</head>
+<body data-page="admin-reports">
+
+  <!-- ── NAVIGATION ──────────────────────────────────────── -->
+  <header>
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+      <div class="container">
+        <a href="/index.html" class="navbar-brand" aria-label="DriveEasy home">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+          </svg>
+          DriveEasy <span style="font-size:0.75rem;opacity:0.7;font-weight:400;">Admin</span>
+        </a>
+        <div class="nav-links">
+          <!-- Avatar + dropdown (populated by auth.js) -->
+          <div class="nav-user" data-auth="loggedIn" style="display:none"></div>
+        </div>
+        <button class="hamburger" id="hamburger-btn" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+      <div class="admin-top-nav" role="navigation" aria-label="Admin navigation">
+        <a href="/pages/admin/dashboard.html">Dashboard</a>
+        <a href="/pages/admin/bookings.html">Bookings</a>
+        <a href="/pages/admin/vehicles.html">Vehicles</a>
+        <a href="/pages/admin/reports.html" class="active">Reports</a>
+      </div>
+
+      <div class="mobile-menu" id="mobile-menu">
+        <a href="/pages/admin/dashboard.html">Dashboard</a>
+        <a href="/pages/admin/bookings.html">Bookings</a>
+        <a href="/pages/admin/vehicles.html">Vehicles</a>
+        <a href="/pages/admin/reports.html">Reports</a>
+        <hr class="divider" />
+        <a href="/pages/profile.html">Profile</a>
+        <button class="btn btn-secondary" data-action="logout">Log Out</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <div class="container">
+        <h1 class="page-title">Reports</h1>
+        <p class="text-muted" style="margin-top:4px;">Revenue, vehicle utilization, and customer insights.</p>
+      </div>
+    </div>
+
+    <div class="container py-lg">
+
+      <!-- ── DATE RANGE PICKER ───────────────────────── -->
+      <div class="card mb-xl">
+        <div class="card-body">
+          <form id="report-form" aria-label="Report date range" style="display:flex;align-items:flex-end;gap:var(--spacing-md);flex-wrap:wrap;">
+            <div class="form-group" style="margin:0;flex:1;min-width:140px;">
+              <label for="report-from">From Date</label>
+              <input type="date" id="report-from" required aria-required="true" />
+            </div>
+            <div class="form-group" style="margin:0;flex:1;min-width:140px;">
+              <label for="report-to">To Date</label>
+              <input type="date" id="report-to" required aria-required="true" />
+            </div>
+            <button type="submit" class="btn btn-primary" style="height:42px;">
+              Generate Report
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- ── REVENUE SECTION ─────────────────────────── -->
+      <div class="report-section">
+        <h2>Revenue Summary</h2>
+        <div id="revenue-report">
+          <div class="spinner-overlay" role="status" aria-label="Loading revenue data">
+            <div class="spinner"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── VEHICLE UTILIZATION ─────────────────────── -->
+      <div class="report-section">
+        <h2>Vehicle Utilization</h2>
+        <div id="vehicles-report">
+          <div class="spinner-overlay" role="status" aria-label="Loading vehicle data">
+            <div class="spinner"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TOP CUSTOMERS ───────────────────────────── -->
+      <div class="report-section">
+        <h2>Top Customers</h2>
+        <div id="customers-report">
+          <div class="spinner-overlay" role="status" aria-label="Loading customer data">
+            <div class="spinner"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container">
+      <div class="footer-brand">DriveEasy Admin</div>
+      <p class="footer-copy">&copy; 2026 DriveEasy. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/utils.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

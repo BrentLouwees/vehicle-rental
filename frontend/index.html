@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DriveEasy — Car & Motorcycle Rental</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/responsive.css" />
+</head>
+<body data-page="home">
+
+  <!-- ── NAVIGATION ──────────────────────────────────────── -->
+  <header>
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+      <div class="container">
+        <a href="/index.html" class="navbar-brand" aria-label="DriveEasy home">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+          </svg>
+          DriveEasy
+        </a>
+
+        <!-- Desktop links -->
+        <div class="nav-links" id="nav-links">
+          <a href="/pages/search.html">Browse Vehicles</a>
+
+          <!-- Logged-in links -->
+          <a href="/pages/my-bookings.html" data-auth="loggedIn" style="display:none">My Bookings</a>
+          <a href="/pages/admin/dashboard.html" data-auth-role="staff,manager" style="display:none">Admin</a>
+
+          <!-- Auth buttons -->
+          <div data-auth="loggedOut" style="display:flex;gap:8px;">
+            <a href="/pages/login.html"    class="btn btn-secondary btn-sm">Log In</a>
+            <a href="/pages/register.html" class="btn btn-primary   btn-sm">Sign Up</a>
+          </div>
+
+          <!-- Avatar + dropdown (populated by auth.js) -->
+          <div class="nav-user" data-auth="loggedIn" style="display:none"></div>
+        </div>
+
+        <!-- Hamburger (mobile) -->
+        <button class="hamburger" id="hamburger-btn" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+      <!-- Mobile menu -->
+      <div class="mobile-menu" id="mobile-menu" role="menu">
+        <a href="/pages/search.html">Browse Vehicles</a>
+        <a href="/pages/my-bookings.html" data-mobile-auth="loggedIn" style="display:none">My Bookings</a>
+        <a href="/pages/admin/dashboard.html" data-mobile-auth-role="staff,manager" style="display:none">Admin</a>
+        <a href="/pages/profile.html" data-mobile-auth="loggedIn" style="display:none">Profile</a>
+        <div data-mobile-auth="loggedOut" style="display:flex;flex-direction:column;gap:8px;padding-top:8px;">
+          <a href="/pages/login.html"    class="btn btn-secondary">Log In</a>
+          <a href="/pages/register.html" class="btn btn-primary">Sign Up</a>
+        </div>
+        <button class="btn btn-secondary" data-action="logout" data-mobile-auth="loggedIn" style="display:none">Log Out</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ── HERO ──────────────────────────────────────────── -->
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="container">
+        <h1 class="hero-title" id="hero-heading">Find Your Perfect Ride</h1>
+        <p class="hero-subtitle">
+          Choose from hundreds of cars and motorcycles at competitive daily rates.
+        </p>
+
+        <!-- Hero Search Form -->
+        <form class="hero-search" id="hero-search-form" aria-label="Vehicle search">
+          <div class="form-group" style="margin:0">
+            <label for="search-type">Vehicle Type</label>
+            <select id="search-type" aria-label="Select vehicle type">
+              <option value="">All Types</option>
+              <option value="car">Car</option>
+              <option value="motorcycle">Motorcycle</option>
+              <option value="suv">SUV</option>
+              <option value="van">Van</option>
+              <option value="truck">Truck</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin:0">
+            <label for="search-location">Pickup Location</label>
+            <select id="search-location" aria-label="Select pickup location">
+              <option value="">Any Location</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin:0">
+            <label for="search-pickup">Pickup Date</label>
+            <input type="date" id="search-pickup" aria-label="Pickup date" />
+          </div>
+
+          <div class="form-group" style="margin:0">
+            <label for="search-return">Return Date</label>
+            <input type="date" id="search-return" aria-label="Return date" />
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" style="align-self:flex-end;">
+            Search Vehicles
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ── FEATURED VEHICLES ─────────────────────────────── -->
+    <section class="py-2xl" aria-labelledby="featured-heading">
+      <div class="container">
+        <h2 class="section-title" id="featured-heading">Featured Vehicles</h2>
+        <p class="section-subtitle">Explore our top-rated cars and motorcycles available now.</p>
+
+        <div id="featured-vehicles">
+          <!-- Rendered by app.js: loadFeaturedVehicles() -->
+          <div class="spinner-overlay" role="status" aria-label="Loading vehicles">
+            <div class="spinner"></div>
+          </div>
+        </div>
+
+        <div class="text-center mt-xl">
+          <a href="/pages/search.html" class="btn btn-outline btn-lg">
+            View All Vehicles
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── WHY US ─────────────────────────────────────────── -->
+    <section class="py-2xl" style="background:var(--color-surface);border-top:1px solid var(--color-border);" aria-labelledby="why-heading">
+      <div class="container">
+        <h2 class="section-title text-center" id="why-heading">Why Choose DriveEasy?</h2>
+        <div class="grid-3" style="margin-top:var(--spacing-xl);">
+          <div class="text-center" style="padding:var(--spacing-lg);">
+            <div style="font-size:2.5rem;margin-bottom:var(--spacing-md);" aria-hidden="true">✓</div>
+            <h3>Easy Booking</h3>
+            <p class="text-muted">Book in minutes with our simple online form. No hidden fees.</p>
+          </div>
+          <div class="text-center" style="padding:var(--spacing-lg);">
+            <div style="font-size:2.5rem;margin-bottom:var(--spacing-md);" aria-hidden="true">🛡</div>
+            <h3>Fully Insured</h3>
+            <p class="text-muted">All vehicles are fully maintained and insurance options available.</p>
+          </div>
+          <div class="text-center" style="padding:var(--spacing-lg);">
+            <div style="font-size:2.5rem;margin-bottom:var(--spacing-md);" aria-hidden="true">📞</div>
+            <h3>24/7 Support</h3>
+            <p class="text-muted">Our team is available around the clock to assist you.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ── FOOTER ─────────────────────────────────────────── -->
+  <footer role="contentinfo">
+    <div class="container">
+      <div class="footer-brand">DriveEasy</div>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="/pages/search.html">Browse</a>
+        <a href="/pages/login.html">Login</a>
+        <a href="/pages/register.html">Sign Up</a>
+      </nav>
+      <p class="footer-copy">&copy; 2026 DriveEasy. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts — load order matters -->
+  <script src="/js/utils.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+/* ============================================================
+   RESPONSIVE.CSS — Breakpoint overrides only.
+   Mobile-first: styles here override the base (mobile) rules
+   at larger viewport widths.
+   ============================================================ */
+
+/* ── 768px — TABLET ─────────────────────────────────────── */
+@media (min-width: 768px) {
+
+  /* Container padding increase */
+  .container {
+    padding: 0 var(--spacing-xl);
+  }
+
+  /* Show desktop nav links, hide hamburger */
+  .nav-links {
+    display: flex;
+  }
+
+  .hamburger {
+    display: none;
+  }
+
+  /* Grid utilities: 2-column */
+  .grid-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .grid-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Hero search: side by side fields */
+  .hero-search {
+    grid-template-columns: 1fr 1fr 1fr 1fr auto;
+    align-items: flex-end;
+  }
+
+  /* Search page: sidebar + main content */
+  .search-layout {
+    grid-template-columns: 260px 1fr;
+  }
+
+  /* Booking page: form + sidebar */
+  .booking-layout {
+    grid-template-columns: 1fr 340px;
+  }
+
+  /* Vehicle detail: gallery + info */
+  .detail-layout {
+    grid-template-columns: 1fr 360px;
+  }
+
+  /* Admin layout: sidebar + content */
+  .admin-layout {
+    grid-template-columns: 220px 1fr;
+  }
+
+  .admin-sidebar {
+    display: block;
+  }
+
+  /* Admin top-nav: hide on tablet+ (sidebar takes over) */
+  /* We keep it visible since we use it for admin pages without a sidebar div */
+
+  /* Stats grid: 3-column */
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Payment methods: keep 2-col grid */
+  .payment-methods {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Confirmation detail grid */
+  .detail-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Hero title larger */
+  .hero-title {
+    font-size: 3rem;
+  }
+
+  /* Filters sidebar: remove card padding constraint on narrow */
+  .filter-sidebar {
+    position: sticky;
+    top: calc(var(--nav-height) + var(--spacing-md));
+    max-height: calc(100vh - var(--nav-height) - 40px);
+    overflow-y: auto;
+  }
+
+  /* Toast position adjustment */
+  .toast-container {
+    top: 76px;
+    right: 24px;
+  }
+}
+
+/* ── 1024px — DESKTOP ────────────────────────────────────── */
+@media (min-width: 1024px) {
+
+  /* Container wider */
+  .container {
+    padding: 0 var(--spacing-xl);
+  }
+
+  /* Grid utilities: 3-column */
+  .grid-3 {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .grid-4 {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+
+  /* Hero search: all fields in one row */
+  .hero-search {
+    grid-template-columns: 180px 1fr 180px 180px auto;
+    gap: var(--spacing-md);
+  }
+
+  .hero-title {
+    font-size: 3.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.25rem;
+  }
+
+  /* Search layout: wider sidebar */
+  .search-layout {
+    grid-template-columns: 280px 1fr;
+  }
+
+  /* Booking page: more room for form */
+  .booking-layout {
+    grid-template-columns: 1fr 360px;
+  }
+
+  /* Admin stat cards: 5-column */
+  .stats-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  /* Vehicle gallery: taller on desktop */
+  .vehicle-gallery img,
+  .vehicle-gallery-placeholder {
+    height: 400px;
+  }
+
+  /* Detail layout: larger content area */
+  .detail-layout {
+    grid-template-columns: 1fr 380px;
+  }
+}
+
+/* ── 1280px — WIDE DESKTOP ───────────────────────────────── */
+@media (min-width: 1280px) {
+
+  /* Wider form card for admin forms */
+  .modal {
+    max-width: 640px;
+  }
+}
+
+/* ── PRINT ───────────────────────────────────────────────── */
+@media print {
+  .navbar,
+  .admin-top-nav,
+  footer,
+  .btn,
+  .status-tabs,
+  .hamburger {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+    font-size: 12pt;
+  }
+
+  .confirmation-card {
+    box-shadow: none;
+    border: 1px solid #ccc;
+    max-width: 100%;
+  }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 10pt;
+    color: #666;
+  }
+
+  .table th,
+  .table td {
+    border: 1px solid #ccc;
+  }
+}
+
+/* ── HIGH CONTRAST / REDUCED MOTION ─────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .spinner {
+    animation: none;
+    border-top-color: var(--color-primary);
+    opacity: 0.6;
+  }
+}
+
+/* ── FOCUS VISIBLE (accessibility) ──────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Remove default focus ring in favour of :focus-visible */
+:focus:not(:focus-visible) {
+  outline: none;
+}

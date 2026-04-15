@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+
+# Environment variables (never commit these)
+.env
+
+# pytest cache
+.pytest_cache/
+backend/tests/__pycache__/
+
+# OS
+.DS_Store
+Thumbs.db

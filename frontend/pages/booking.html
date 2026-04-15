@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book a Vehicle — DriveEasy</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/responsive.css" />
+</head>
+<body data-page="booking">
+
+  <!-- ── NAVIGATION ──────────────────────────────────────── -->
+  <header>
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+      <div class="container">
+        <a href="/index.html" class="navbar-brand" aria-label="DriveEasy home">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+          </svg>
+          DriveEasy
+        </a>
+        <div class="nav-links">
+          <a href="/pages/search.html">Browse Vehicles</a>
+          <a href="/pages/my-bookings.html">My Bookings</a>
+          <!-- Avatar + dropdown (populated by auth.js) -->
+          <div class="nav-user" data-auth="loggedIn" style="display:none"></div>
+        </div>
+        <button class="hamburger" id="hamburger-btn" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="mobile-menu" id="mobile-menu">
+        <a href="/pages/search.html">Browse Vehicles</a>
+        <a href="/pages/my-bookings.html">My Bookings</a>
+        <a href="/pages/profile.html">Profile</a>
+        <button class="btn btn-secondary" data-action="logout">Log Out</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <div class="container">
+        <div class="breadcrumb">
+          <a href="/index.html">Home</a>
+          <span class="sep">/</span>
+          <a href="/pages/search.html">Vehicles</a>
+          <span class="sep">/</span>
+          <span>Book</span>
+        </div>
+        <h1 class="page-title">Book Your Vehicle</h1>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="booking-layout" id="booking-main-layout">
+
+        <!-- ── BOOKING FORM ───────────────────────────── -->
+        <section aria-labelledby="booking-form-heading">
+          <h2 id="booking-form-heading" class="section-title">Rental Details</h2>
+
+          <form id="booking-form" novalidate aria-label="Booking form">
+
+            <!-- Locations -->
+            <div class="card" style="margin-bottom:var(--spacing-lg);">
+              <div class="card-body">
+                <h3 style="margin-bottom:var(--spacing-md);">Pickup &amp; Return</h3>
+
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label for="pickup-location">
+                      Pickup Location <span class="required" aria-hidden="true">*</span>
+                    </label>
+                    <select id="pickup-location" required aria-required="true">
+                      <option value="">Select location</option>
+                    </select>
+                    <span class="field-error" id="pickup-location-error" role="alert"></span>
+                  </div>
+                  <div class="form-group">
+                    <label for="return-location">
+                      Return Location <span class="required" aria-hidden="true">*</span>
+                    </label>
+                    <select id="return-location" required aria-required="true">
+                      <option value="">Select location</option>
+                    </select>
+                    <span class="field-error" id="return-location-error" role="alert"></span>
+                  </div>
+                </div>
+
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label for="pickup-date">
+                      Pickup Date <span class="required" aria-hidden="true">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      id="pickup-date"
+                      required
+                      aria-required="true"
+                    />
+                    <span class="field-error" id="pickup-date-error" role="alert"></span>
+                  </div>
+                  <div class="form-group">
+                    <label for="return-date">
+                      Return Date <span class="required" aria-hidden="true">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      id="return-date"
+                      required
+                      aria-required="true"
+                    />
+                    <span class="field-error" id="return-date-error" role="alert"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Add-ons -->
+            <div class="card" style="margin-bottom:var(--spacing-lg);">
+              <div class="card-body">
+                <h3 style="margin-bottom:var(--spacing-sm);">Optional Add-ons</h3>
+                <p class="text-muted" style="font-size:0.875rem;margin-bottom:var(--spacing-md);">
+                  Add-on prices are per day and applied to your rental duration.
+                </p>
+
+                <div class="checkbox-group" role="group" aria-label="Optional add-ons">
+
+                  <label class="addon-item">
+                    <input
+                      type="checkbox"
+                      class="addon-checkbox"
+                      data-addon="insurance"
+                      data-price="15"
+                      aria-label="Insurance, $15 per day"
+                    />
+                    <span class="addon-name">
+                      <span aria-hidden="true">🛡</span> Insurance
+                    </span>
+                    <span class="addon-price">$15/day</span>
+                  </label>
+
+                  <label class="addon-item">
+                    <input
+                      type="checkbox"
+                      class="addon-checkbox"
+                      data-addon="gps"
+                      data-price="5"
+                      aria-label="GPS Navigation, $5 per day"
+                    />
+                    <span class="addon-name">
+                      <span aria-hidden="true">🗺</span> GPS Navigation
+                    </span>
+                    <span class="addon-price">$5/day</span>
+                  </label>
+
+                  <label class="addon-item">
+                    <input
+                      type="checkbox"
+                      class="addon-checkbox"
+                      data-addon="extra_driver"
+                      data-price="10"
+                      aria-label="Extra Driver, $10 per day"
+                    />
+                    <span class="addon-name">
+                      <span aria-hidden="true">👤</span> Extra Driver
+                    </span>
+                    <span class="addon-price">$10/day</span>
+                  </label>
+
+                  <label class="addon-item">
+                    <input
+                      type="checkbox"
+                      class="addon-checkbox"
+                      data-addon="child_seat"
+                      data-price="8"
+                      aria-label="Child Seat, $8 per day"
+                    />
+                    <span class="addon-name">
+                      <span aria-hidden="true">🧸</span> Child Seat
+                    </span>
+                    <span class="addon-price">$8/day</span>
+                  </label>
+
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block btn-lg">
+              Confirm Booking
+            </button>
+          </form>
+        </section>
+
+        <!-- ── BOOKING SUMMARY SIDEBAR ────────────────── -->
+        <aside aria-label="Booking summary">
+          <!-- Vehicle info (populated by JS) -->
+          <div class="booking-summary-box" id="booking-vehicle-summary"
+               style="margin-bottom:var(--spacing-lg);">
+            <div class="spinner-overlay" role="status" aria-label="Loading vehicle">
+              <div class="spinner"></div>
+            </div>
+          </div>
+
+          <!-- Price breakdown -->
+          <div class="booking-summary-box">
+            <h3>Price Breakdown</h3>
+            <div class="price-breakdown">
+              <div class="price-line">
+                <span>Duration</span>
+                <span id="price-days">—</span>
+              </div>
+              <div class="price-line">
+                <span>Daily Rate</span>
+                <span id="price-rate">—</span>
+              </div>
+              <div class="price-line">
+                <span>Subtotal</span>
+                <span id="price-subtotal">$0.00</span>
+              </div>
+              <div class="price-line">
+                <span>Add-ons</span>
+                <span id="price-addons">$0.00</span>
+              </div>
+              <div class="price-line total">
+                <span>Total</span>
+                <strong id="price-total" style="color:var(--color-primary);">$0.00</strong>
+              </div>
+            </div>
+
+            <div class="alert alert-info mt-md" style="font-size:0.8125rem;">
+              Payment is collected after staff confirms your booking.
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container">
+      <div class="footer-brand">DriveEasy</div>
+      <p class="footer-copy">&copy; 2026 DriveEasy. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/utils.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

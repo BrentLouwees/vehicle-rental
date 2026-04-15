@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile — DriveEasy</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/responsive.css" />
+</head>
+<body data-page="profile">
+
+  <!-- ── NAVIGATION ──────────────────────────────────────── -->
+  <header>
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+      <div class="container">
+        <a href="/index.html" class="navbar-brand" aria-label="DriveEasy home">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+          </svg>
+          DriveEasy
+        </a>
+        <div class="nav-links">
+          <a href="/pages/search.html">Browse Vehicles</a>
+          <a href="/pages/my-bookings.html">My Bookings</a>
+          <a href="/pages/admin/dashboard.html" data-auth-role="staff,manager" style="display:none">Admin</a>
+          <!-- Avatar + dropdown (populated by auth.js) -->
+          <div class="nav-user" data-auth="loggedIn" style="display:none"></div>
+        </div>
+        <button class="hamburger" id="hamburger-btn" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="mobile-menu" id="mobile-menu">
+        <a href="/pages/search.html">Browse Vehicles</a>
+        <a href="/pages/my-bookings.html">My Bookings</a>
+        <a href="/pages/profile.html">Profile</a>
+        <button class="btn btn-secondary" data-action="logout">Log Out</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <div class="container">
+        <h1 class="page-title">My Profile</h1>
+        <p class="text-muted" style="margin-top:4px;">Manage your account information.</p>
+      </div>
+    </div>
+
+    <div class="container py-lg" style="max-width:640px;">
+
+      <!-- ── PERSONAL INFO ───────────────────────────── -->
+      <div class="profile-section">
+        <h3>Personal Information</h3>
+
+        <form id="profile-form" novalidate aria-label="Update profile">
+          <div class="form-group">
+            <label for="profile-name">
+              Full Name <span class="required" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="text"
+              id="profile-name"
+              name="full_name"
+              autocomplete="name"
+              placeholder="Your full name"
+              required
+              aria-required="true"
+            />
+            <span class="field-error" id="profile-name-error" role="alert"></span>
+          </div>
+
+          <!-- Email is read-only (cannot be changed via this endpoint) -->
+          <div class="form-group">
+            <label for="profile-email">Email Address</label>
+            <input
+              type="email"
+              id="profile-email"
+              name="email"
+              autocomplete="email"
+              readonly
+              aria-readonly="true"
+              style="background:var(--color-bg);color:var(--color-text-muted);cursor:not-allowed;"
+            />
+            <small class="text-muted">Email address cannot be changed.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="profile-phone">
+              Phone Number <span class="required" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="tel"
+              id="profile-phone"
+              name="phone"
+              autocomplete="tel"
+              placeholder="+1 555 000 0000"
+              required
+              aria-required="true"
+            />
+            <span class="field-error" id="profile-phone-error" role="alert"></span>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </div>
+
+      <!-- ── CHANGE PASSWORD ─────────────────────────── -->
+      <div class="profile-section">
+        <h3>Change Password</h3>
+
+        <form id="password-form" novalidate aria-label="Change password">
+          <div class="form-group">
+            <label for="current-password">
+              Current Password <span class="required" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="password"
+              id="current-password"
+              name="current_password"
+              autocomplete="current-password"
+              placeholder="Your current password"
+              required
+              aria-required="true"
+            />
+            <span class="field-error" id="current-password-error" role="alert"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="new-password">
+              New Password <span class="required" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="password"
+              id="new-password"
+              name="new_password"
+              autocomplete="new-password"
+              placeholder="At least 8 characters"
+              required
+              aria-required="true"
+              minlength="8"
+            />
+            <span class="field-error" id="new-password-error" role="alert"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="confirm-new-password">
+              Confirm New Password <span class="required" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="password"
+              id="confirm-new-password"
+              name="confirm_new_password"
+              autocomplete="new-password"
+              placeholder="Re-enter new password"
+              required
+              aria-required="true"
+            />
+            <span class="field-error" id="confirm-new-password-error" role="alert"></span>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Update Password</button>
+        </form>
+      </div>
+
+      <!-- Danger zone -->
+      <div style="border-top:1px solid var(--color-border);padding-top:var(--spacing-lg);text-align:center;">
+        <p class="text-muted" style="font-size:0.875rem;margin-bottom:var(--spacing-sm);">
+          Want to leave?
+        </p>
+        <button class="btn btn-danger btn-sm" data-action="logout">
+          Log Out
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container">
+      <div class="footer-brand">DriveEasy</div>
+      <p class="footer-copy">&copy; 2026 DriveEasy. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/utils.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

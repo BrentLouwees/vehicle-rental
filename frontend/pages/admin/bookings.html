@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Bookings — DriveEasy Admin</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/responsive.css" />
+</head>
+<body data-page="admin-bookings">
+
+  <!-- ── NAVIGATION ──────────────────────────────────────── -->
+  <header>
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+      <div class="container">
+        <a href="/index.html" class="navbar-brand" aria-label="DriveEasy home">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+          </svg>
+          DriveEasy <span style="font-size:0.75rem;opacity:0.7;font-weight:400;">Admin</span>
+        </a>
+        <div class="nav-links">
+          <!-- Avatar + dropdown (populated by auth.js) -->
+          <div class="nav-user" data-auth="loggedIn" style="display:none"></div>
+        </div>
+        <button class="hamburger" id="hamburger-btn" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+      <!-- Admin navigation tabs -->
+      <div class="admin-top-nav" role="navigation" aria-label="Admin navigation">
+        <a href="/pages/admin/dashboard.html">Dashboard</a>
+        <a href="/pages/admin/bookings.html" class="active">Bookings</a>
+        <a href="/pages/admin/vehicles.html">Vehicles</a>
+        <a href="/pages/admin/reports.html" data-manager-only>Reports</a>
+      </div>
+
+      <div class="mobile-menu" id="mobile-menu">
+        <a href="/pages/admin/dashboard.html">Dashboard</a>
+        <a href="/pages/admin/bookings.html">Bookings</a>
+        <a href="/pages/admin/vehicles.html">Vehicles</a>
+        <a href="/pages/admin/reports.html" data-manager-only>Reports</a>
+        <hr class="divider" />
+        <a href="/pages/profile.html">Profile</a>
+        <button class="btn btn-secondary" data-action="logout">Log Out</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <div class="container">
+        <h1 class="page-title">Manage Bookings</h1>
+        <p class="text-muted" style="margin-top:4px;">Review, confirm, and process all customer bookings.</p>
+      </div>
+    </div>
+
+    <div class="container py-lg">
+
+      <!-- Status filter tabs -->
+      <div class="status-tabs" role="tablist" aria-label="Filter bookings by status">
+        <button class="status-tab active" data-status="all"       role="tab" aria-selected="true">All</button>
+        <button class="status-tab"        data-status="pending"   role="tab" aria-selected="false">Pending</button>
+        <button class="status-tab"        data-status="confirmed" role="tab" aria-selected="false">Confirmed</button>
+        <button class="status-tab"        data-status="active"    role="tab" aria-selected="false">Active</button>
+        <button class="status-tab"        data-status="completed" role="tab" aria-selected="false">Completed</button>
+        <button class="status-tab"        data-status="cancelled" role="tab" aria-selected="false">Cancelled</button>
+      </div>
+
+      <!-- Bookings table -->
+      <div class="table-wrapper">
+        <table class="table" aria-label="All bookings">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Customer</th>
+              <th scope="col">Vehicle</th>
+              <th scope="col">Dates</th>
+              <th scope="col">Total</th>
+              <th scope="col">Status</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="admin-bookings-body">
+            <tr>
+              <td colspan="7">
+                <div class="spinner-overlay" role="status" aria-label="Loading bookings">
+                  <div class="spinner"></div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container">
+      <div class="footer-brand">DriveEasy Admin</div>
+      <p class="footer-copy">&copy; 2026 DriveEasy. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/utils.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

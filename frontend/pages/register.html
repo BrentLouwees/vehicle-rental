@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account — DriveEasy</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/responsive.css" />
+</head>
+<body data-page="register">
+
+  <!-- ── NAVIGATION ──────────────────────────────────────── -->
+  <header>
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+      <div class="container">
+        <a href="/index.html" class="navbar-brand" aria-label="DriveEasy home">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+          </svg>
+          DriveEasy
+        </a>
+        <div class="nav-links">
+          <a href="/pages/search.html">Browse Vehicles</a>
+          <a href="/pages/login.html" class="btn btn-secondary btn-sm">Log In</a>
+        </div>
+        <button class="hamburger" id="hamburger-btn" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="mobile-menu" id="mobile-menu">
+        <a href="/pages/search.html">Browse Vehicles</a>
+        <a href="/pages/login.html" class="btn btn-secondary">Log In</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="container py-2xl">
+      <div class="form-card" style="max-width:480px;">
+        <h2>Create Your Account</h2>
+        <p class="text-muted text-center mb-lg" style="margin-top:calc(var(--spacing-sm)*-1);">
+          Join DriveEasy and start renting today
+        </p>
+
+        <form id="register-form" novalidate aria-label="Registration form">
+          <!-- Full Name -->
+          <div class="form-group">
+            <label for="full_name">
+              Full Name <span class="required" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="text"
+              id="full_name"
+              name="full_name"
+              autocomplete="name"
+              placeholder="Jane Doe"
+              required
+              aria-required="true"
+            />
+            <span class="field-error" id="full_name-error" role="alert"></span>
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label for="email">
+              Email Address <span class="required" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              autocomplete="email"
+              placeholder="you@example.com"
+              required
+              aria-required="true"
+            />
+            <span class="field-error" id="email-error" role="alert"></span>
+          </div>
+
+          <!-- Phone -->
+          <div class="form-group">
+            <label for="phone">
+              Phone Number <span class="required" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              autocomplete="tel"
+              placeholder="+1 555 000 0000"
+              required
+              aria-required="true"
+            />
+            <span class="field-error" id="phone-error" role="alert"></span>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <label for="password">
+              Password <span class="required" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              autocomplete="new-password"
+              placeholder="At least 8 characters"
+              required
+              aria-required="true"
+              minlength="8"
+            />
+            <span class="field-error" id="password-error" role="alert"></span>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="form-group">
+            <label for="confirm_password">
+              Confirm Password <span class="required" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="password"
+              id="confirm_password"
+              name="confirm_password"
+              autocomplete="new-password"
+              placeholder="Re-enter your password"
+              required
+              aria-required="true"
+            />
+            <span class="field-error" id="confirm_password-error" role="alert"></span>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top:var(--spacing-md);">
+            Create Account
+          </button>
+        </form>
+
+        <hr class="divider" style="margin:var(--spacing-lg) 0;" />
+
+        <p class="form-footer">
+          Already have an account? <a href="/pages/login.html">Log in</a>
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container">
+      <div class="footer-brand">DriveEasy</div>
+      <p class="footer-copy">&copy; 2026 DriveEasy. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/utils.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
