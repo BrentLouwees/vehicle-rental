@@ -13,7 +13,7 @@ from config import settings
 # pool_pre_ping detects stale connections (important on Render where MySQL may
 # close idle connections after a few minutes).
 engine = create_engine(
-    settings.DATABASE_URL,
+    settings.database_url,
     pool_pre_ping=True,
     pool_recycle=1800,  # recycle connections every 30 minutes
 )

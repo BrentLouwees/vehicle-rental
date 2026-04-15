@@ -19,6 +19,17 @@ class Settings:
         "mysql+pymysql://root:password@localhost/vehicle_rental",
     )
 
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+
+    @property
+    def database_url(self) -> str:
+        """Return DATABASE_URL, ensuring the pymysql driver is used."""
+        url = self.DATABASE_URL
+        if url.startswith("mysql://"):
+            url = "mysql+pymysql://" + url[len("mysql://"):]
+        return url
+
     SECRET_KEY: str = os.getenv("SECRET_KEY")
 
     def __init__(self):
