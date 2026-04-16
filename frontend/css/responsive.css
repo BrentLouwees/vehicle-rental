@@ -78,10 +78,7 @@
     grid-template-columns: 1fr 1fr;
   }
 
-  /* Hero title larger */
-  .hero-title {
-    font-size: 3rem;
-  }
+  /* Hero title — now uses clamp() in base CSS */
 
   /* Filters sidebar: remove card padding constraint on narrow */
   .filter-sidebar {
@@ -89,6 +86,11 @@
     top: calc(var(--nav-height) + var(--spacing-md));
     max-height: calc(100vh - var(--nav-height) - 40px);
     overflow-y: auto;
+  }
+
+  /* Footer grid: 3-column */
+  .footer-grid {
+    grid-template-columns: 2fr 1fr 1fr;
   }
 
   /* Toast position adjustment */
@@ -121,13 +123,7 @@
     gap: var(--spacing-md);
   }
 
-  .hero-title {
-    font-size: 3.5rem;
-  }
-
-  .hero-subtitle {
-    font-size: 1.25rem;
-  }
+  /* Hero title/subtitle — now uses clamp() in base CSS */
 
   /* Search layout: wider sidebar */
   .search-layout {
