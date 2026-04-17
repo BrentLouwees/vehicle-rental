@@ -186,6 +186,11 @@ function updateNav() {
     el.style.display = (user && allowedRoles.includes(user.role)) ? '' : 'none';
   });
 
+  // Elements that show only for managers (Reports link in admin nav)
+  document.querySelectorAll('[data-manager-only]').forEach(el => {
+    el.style.display = (user && user.role === 'manager') ? '' : 'none';
+  });
+
   // Populate username display (legacy plain-text spans)
   document.querySelectorAll('[data-auth="userName"]').forEach(el => {
     el.textContent = user ? user.full_name : '';

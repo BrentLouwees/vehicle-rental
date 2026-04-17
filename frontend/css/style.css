@@ -175,11 +175,11 @@ small, .text-sm { font-size: 0.875rem; }
   box-shadow: 0 1px 16px rgba(15, 23, 42, 0.06);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  height: var(--nav-height);
+  min-height: var(--nav-height);
 }
 
 .navbar .container {
-  height: 100%;
+  min-height: var(--nav-height);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -291,7 +291,7 @@ small, .text-sm { font-size: 0.875rem; }
   padding: var(--spacing-md);
   gap: var(--spacing-sm);
   position: absolute;
-  top: var(--nav-height);
+  top: 100%;
   left: 0;
   right: 0;
   z-index: 999;
