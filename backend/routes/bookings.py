@@ -9,7 +9,7 @@ from datetime import date
 from decimal import Decimal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from database import get_db
 from models.booking import Booking, BookingAddon
@@ -156,7 +156,10 @@ def list_bookings(
     _: User = Depends(require_staff),
 ):
     """List all bookings with optional filters (staff/manager only)."""
-    query = db.query(Booking)
+    query = db.query(Booking).options(
+        joinedload(Booking.vehicle),
+        joinedload(Booking.customer),
+    )
 
     if booking_status:
         query = query.filter(Booking.status == booking_status)

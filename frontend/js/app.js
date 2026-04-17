@@ -163,6 +163,17 @@ async function initSearch() {
   // Fetch and render results
   await fetchAndRenderVehicles(filters);
 
+  // Sort change — re-render without re-fetching
+  const sortSelect = document.getElementById('sort-select');
+  if (sortSelect) {
+    sortSelect.addEventListener('change', function () {
+      const container = document.getElementById('vehicles-grid');
+      if (!container || _lastFetchedVehicles.length === 0) return;
+      const sorted = _sortVehicles(_lastFetchedVehicles, this.value);
+      container.innerHTML = `<div class="grid-3">${sorted.map(renderVehicleCard).join('')}</div>`;
+    });
+  }
+
   // Filter form change handlers
   const filterForm = document.getElementById('filter-form');
   if (filterForm) {
@@ -201,6 +212,17 @@ function applyFilters() {
   fetchAndRenderVehicles(filters);
 }
 
+let _lastFetchedVehicles = [];
+
+function _sortVehicles(vehicles, sortVal) {
+  const statusOrder = { available: 0, maintenance: 1, rented: 2 };
+  const v = vehicles.slice();
+  if (sortVal === 'price_asc')  return v.sort((a, b) => a.daily_rate - b.daily_rate);
+  if (sortVal === 'price_desc') return v.sort((a, b) => b.daily_rate - a.daily_rate);
+  if (sortVal === 'availability') return v.sort((a, b) => (statusOrder[a.status] ?? 3) - (statusOrder[b.status] ?? 3));
+  return v;
+}
+
 async function fetchAndRenderVehicles(filters) {
   const container   = document.getElementById('vehicles-grid');
   const countEl     = document.getElementById('results-count');
@@ -210,13 +232,13 @@ async function fetchAndRenderVehicles(filters) {
 
   try {
     const result   = await getVehicles(filters);
-    const vehicles = Array.isArray(result) ? result : (result.items || result.data || []);
+    _lastFetchedVehicles = Array.isArray(result) ? result : (result.items || result.data || []);
 
     if (countEl) {
-      countEl.textContent = `${vehicles.length} vehicle${vehicles.length !== 1 ? 's' : ''} found`;
+      countEl.textContent = `${_lastFetchedVehicles.length} vehicle${_lastFetchedVehicles.length !== 1 ? 's' : ''} found`;
     }
 
-    if (vehicles.length === 0) {
+    if (_lastFetchedVehicles.length === 0) {
       container.innerHTML = renderEmptyState(
         'No vehicles found',
         'Try adjusting your filters or search dates.',
@@ -225,7 +247,9 @@ async function fetchAndRenderVehicles(filters) {
       return;
     }
 
-    container.innerHTML = `<div class="grid-3">${vehicles.map(renderVehicleCard).join('')}</div>`;
+    const sortVal = (document.getElementById('sort-select') || {}).value || 'default';
+    const sorted  = _sortVehicles(_lastFetchedVehicles, sortVal);
+    container.innerHTML = `<div class="grid-3">${sorted.map(renderVehicleCard).join('')}</div>`;
   } catch (err) {
     container.innerHTML = renderEmptyState('Could not load vehicles', err.message);
   }
@@ -280,6 +304,58 @@ function renderVehicleDetail(vehicle) {
        </div>`
     : '<p class="text-muted" style="font-size:0.875rem;">No reviews yet.</p>';
 
+  // Spec grid items
+  const specs = [
+    vehicle.type         && { label: 'Type',         value: capitalize(vehicle.type) },
+    vehicle.year         && { label: 'Year',          value: vehicle.year },
+    vehicle.transmission && { label: 'Transmission',  value: capitalize(vehicle.transmission) },
+    vehicle.fuel_type    && { label: 'Fuel Type',     value: capitalize(vehicle.fuel_type) },
+    vehicle.seats        && { label: 'Seats',         value: vehicle.seats },
+    vehicle.color        && { label: 'Color',         value: capitalize(vehicle.color) },
+    vehicle.plate_number && { label: 'Plate',         value: vehicle.plate_number },
+  ].filter(Boolean);
+
+  const specGridHtml = `
+    <div class="spec-grid">
+      ${specs.map(s => `
+        <div class="spec-box">
+          <span class="spec-box-label">${escapeHtml(s.label)}</span>
+          <span class="spec-box-value">${escapeHtml(String(s.value))}</span>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  // Best-for tags derived from vehicle type
+  const bestForMap = {
+    car:        ['City Driving', 'Family Trips', 'Road Trips'],
+    motorcycle: ['Commuting', 'City Navigation', 'Fuel Efficiency'],
+    suv:        ['Off-Road', 'Family Trips', 'Long Drives'],
+    van:        ['Group Travel', 'Cargo', 'Road Trips'],
+    truck:      ['Heavy Cargo', 'Commercial Use', 'Towing'],
+  };
+  const bestForTags = (bestForMap[vehicle.type] || ['Versatile Use']).map(
+    tag => `<span class="best-for-tag">${escapeHtml(tag)}</span>`
+  ).join('');
+
+  // Reserve card (only when available)
+  const reserveCardHtml = vehicle.status === 'available' ? `
+    <div class="reserve-card" id="reserve-card">
+      <h3>Quick Reserve</h3>
+      <p class="text-muted" style="font-size:0.875rem;margin-bottom:var(--spacing-md);">Hold this vehicle for your dates. No payment needed now.</p>
+      <div class="form-group">
+        <label for="reserve-pickup">Pickup Date</label>
+        <input type="date" id="reserve-pickup" />
+      </div>
+      <div class="form-group">
+        <label for="reserve-return">Return Date</label>
+        <input type="date" id="reserve-return" />
+      </div>
+      <button class="btn btn-primary btn-block" id="reserve-btn" type="button">Reserve Vehicle</button>
+      <p class="text-muted" style="font-size:0.75rem;margin-top:var(--spacing-sm);text-align:center;">Complete payment later in My Bookings.</p>
+    </div>
+  ` : '';
+
   container.innerHTML = `
     <div class="detail-layout">
       <!-- Left: gallery + info -->
@@ -296,21 +372,23 @@ function renderVehicleDetail(vehicle) {
             <span>${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.model)}</span>
           </div>
           <h1 style="font-size:1.75rem;">${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.model)}</h1>
-          <p class="text-muted" style="margin-bottom:var(--spacing-sm);">${vehicle.year || ''}</p>
+          <p class="text-muted" style="margin-bottom:var(--spacing-sm);">${vehicle.year || ''} · ${escapeHtml(capitalize(vehicle.type || ''))}</p>
 
           ${ratingHtml}
 
-          <div class="vehicle-specs mt-md">
-            ${vehicle.type         ? `<span class="spec-item"><strong>Type:</strong> ${escapeHtml(capitalize(vehicle.type))}</span>` : ''}
-            ${vehicle.transmission ? `<span class="spec-item"><strong>Transmission:</strong> ${escapeHtml(capitalize(vehicle.transmission))}</span>` : ''}
-            ${vehicle.fuel_type    ? `<span class="spec-item"><strong>Fuel:</strong> ${escapeHtml(capitalize(vehicle.fuel_type))}</span>` : ''}
-            ${vehicle.seats        ? `<span class="spec-item"><strong>Seats:</strong> ${vehicle.seats}</span>` : ''}
-            ${vehicle.plate_number ? `<span class="spec-item"><strong>Plate:</strong> ${escapeHtml(vehicle.plate_number)}</span>` : ''}
-          </div>
+          ${specGridHtml}
 
           ${vehicle.description
-            ? `<p style="margin-top:var(--spacing-md);color:var(--color-text-muted);">${escapeHtml(vehicle.description)}</p>`
+            ? `<div class="mt-md">
+                 <h3 style="font-size:1rem;margin-bottom:var(--spacing-xs);">About this vehicle</h3>
+                 <p style="color:var(--color-text-muted);">${escapeHtml(vehicle.description)}</p>
+               </div>`
             : ''}
+
+          <div class="mt-md">
+            <h3 style="font-size:1rem;margin-bottom:var(--spacing-sm);">Best for</h3>
+            <div class="best-for-tags">${bestForTags}</div>
+          </div>
 
           ${vehicle.location
             ? `<p class="mt-md"><strong>Pickup location:</strong> ${escapeHtml(vehicle.location.name || vehicle.location)}</p>`
@@ -320,33 +398,37 @@ function renderVehicleDetail(vehicle) {
 
       <!-- Right: booking CTA -->
       <div>
-        <div class="booking-summary-box" style="position:sticky;top:80px;">
-          <h3>Book This Vehicle</h3>
-          <div class="vehicle-price-box">
-            <div>
-              <div style="font-size:0.8rem;color:var(--color-text-muted);">Daily rate</div>
-              <div class="vehicle-price-big">
-                ${formatCurrency(vehicle.daily_rate)}
-                <small>/ day</small>
+        <div style="position:sticky;top:80px;">
+          <div class="booking-summary-box">
+            <h3>Book This Vehicle</h3>
+            <div class="vehicle-price-box">
+              <div>
+                <div style="font-size:0.8rem;color:var(--color-text-muted);">Daily rate</div>
+                <div class="vehicle-price-big">
+                  ${formatCurrency(vehicle.daily_rate)}
+                  <small>/ day</small>
+                </div>
               </div>
+              <span class="badge ${vehicle.status === 'available' ? 'status-available' : 'status-maintenance'}">
+                ${escapeHtml(capitalize(vehicle.status || 'available'))}
+              </span>
             </div>
-            <span class="badge ${vehicle.status === 'available' ? 'status-available' : 'status-maintenance'}">
-              ${escapeHtml(capitalize(vehicle.status || 'available'))}
-            </span>
+
+            ${vehicle.status === 'available'
+              ? `<a href="/pages/booking.html?vehicle_id=${vehicle.id}" class="btn btn-primary btn-block btn-lg">
+                   Book Now
+                 </a>`
+              : `<button class="btn btn-secondary btn-block btn-lg" disabled>
+                   Not Available
+                 </button>`
+            }
+
+            <div class="mt-md" style="font-size:0.8125rem;color:var(--color-text-muted);text-align:center;">
+              Free cancellation on pending bookings
+            </div>
           </div>
 
-          ${vehicle.status === 'available'
-            ? `<a href="/pages/booking.html?vehicle_id=${vehicle.id}" class="btn btn-primary btn-block btn-lg">
-                 Book Now
-               </a>`
-            : `<button class="btn btn-secondary btn-block btn-lg" disabled>
-                 Not Available
-               </button>`
-          }
-
-          <div class="mt-md" style="font-size:0.8125rem;color:var(--color-text-muted);text-align:center;">
-            Free cancellation on pending bookings
-          </div>
+          ${reserveCardHtml}
         </div>
       </div>
     </div>
@@ -355,6 +437,40 @@ function renderVehicleDetail(vehicle) {
     <div id="reviews-section" class="reviews-section"></div>
     <div id="review-form-section"></div>
   `;
+
+  // Reserve button handler
+  const reserveBtn = document.getElementById('reserve-btn');
+  if (reserveBtn) {
+    reserveBtn.addEventListener('click', async function () {
+      if (!isLoggedIn()) {
+        window.location.href = '/pages/login.html?redirect=' + encodeURIComponent(window.location.href);
+        return;
+      }
+      const pickup = document.getElementById('reserve-pickup').value;
+      const ret    = document.getElementById('reserve-return').value;
+      if (!pickup || !ret) { showToast('Please select both dates.', 'warning'); return; }
+      if (ret <= pickup)   { showToast('Return date must be after pickup date.', 'warning'); return; }
+
+      reserveBtn.disabled = true;
+      reserveBtn.textContent = 'Reserving…';
+      try {
+        await createBooking({
+          vehicle_id:          vehicle.id,
+          pickup_location_id:  vehicle.location_id,
+          return_location_id:  vehicle.location_id,
+          pickup_date:         pickup,
+          return_date:         ret,
+          addons:              [],
+        });
+        showToast('Vehicle reserved! View it in My Bookings.', 'success');
+        reserveBtn.textContent = 'Reserved ✓';
+      } catch (err) {
+        showToast(err.message || 'Could not reserve vehicle.', 'error');
+        reserveBtn.disabled = false;
+        reserveBtn.textContent = 'Reserve Vehicle';
+      }
+    });
+  }
 }
 
 async function loadVehicleReviews(vehicleId) {
@@ -1346,19 +1462,19 @@ async function generateReports(from, to) {
 function renderRevenueReport(data) {
   const el = document.getElementById('revenue-report');
   if (!el) return;
-
   if (!data) { el.innerHTML = '<p class="text-muted">No revenue data.</p>'; return; }
 
   const totalRevenue  = data.total_revenue  || 0;
-  const totalBookings = data.total_bookings || 0;
-  const byType        = data.by_type        || {};
+  const totalBookings = data.booking_count  || 0;
+  const byType        = Array.isArray(data.by_vehicle_type) ? data.by_vehicle_type : [];
 
-  const byTypeRows = Object.entries(byType).map(([type, rev]) => `
+  const byTypeRows = byType.map(row => `
     <tr>
-      <td>${escapeHtml(capitalize(type))}</td>
-      <td>${formatCurrency(rev)}</td>
+      <td>${escapeHtml(capitalize(row.vehicle_type || ''))}</td>
+      <td>${row.booking_count || 0}</td>
+      <td>${formatCurrency(row.total_revenue || 0)}</td>
     </tr>
-  `).join('') || '<tr><td colspan="2" class="text-muted">No breakdown available.</td></tr>';
+  `).join('') || '<tr><td colspan="3" class="text-muted">No breakdown available.</td></tr>';
 
   el.innerHTML = `
     <div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));">
@@ -1374,7 +1490,7 @@ function renderRevenueReport(data) {
     <h4 class="mt-lg mb-md">Revenue by Vehicle Type</h4>
     <div class="table-wrapper">
       <table class="table">
-        <thead><tr><th>Type</th><th>Revenue</th></tr></thead>
+        <thead><tr><th>Type</th><th>Bookings</th><th>Revenue</th></tr></thead>
         <tbody>${byTypeRows}</tbody>
       </table>
     </div>
@@ -1393,10 +1509,11 @@ function renderVehiclesReport(data) {
 
   const rows = vehicles.map(v => `
     <tr>
-      <td><strong>${escapeHtml(v.brand || '')} ${escapeHtml(v.model || '')}</strong></td>
-      <td>${v.bookings_count || 0}</td>
-      <td>${formatCurrency(v.revenue || 0)}</td>
-      <td>${v.utilization_percent != null ? v.utilization_percent + '%' : '—'}</td>
+      <td><strong>${escapeHtml(v.brand || '')} ${escapeHtml(v.model || '')}</strong><br>
+        <small class="text-muted">${escapeHtml(v.plate_number || '')}</small></td>
+      <td>${v.total_bookings || 0}</td>
+      <td>${v.total_days_rented || 0}</td>
+      <td>${formatCurrency(v.total_revenue || 0)}</td>
     </tr>
   `).join('');
 
@@ -1407,8 +1524,8 @@ function renderVehiclesReport(data) {
           <tr>
             <th>Vehicle</th>
             <th>Bookings</th>
+            <th>Days Rented</th>
             <th>Revenue</th>
-            <th>Utilization</th>
           </tr>
         </thead>
         <tbody>${rows}</tbody>

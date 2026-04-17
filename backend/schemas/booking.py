@@ -73,6 +73,25 @@ class BookingOut(BaseModel):
     addons: list[AddonOut] = []
 
 
+class VehicleSummary(BaseModel):
+    """Minimal vehicle info nested inside booking list responses."""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    brand: str
+    model: str
+    plate_number: str
+
+
+class CustomerSummary(BaseModel):
+    """Minimal customer info nested inside booking list responses."""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    full_name: str
+    email: str
+
+
 class BookingListOut(BaseModel):
     """Lightweight schema for list responses (no nested addons)."""
     model_config = ConfigDict(from_attributes=True)
@@ -85,3 +104,5 @@ class BookingListOut(BaseModel):
     status: str
     total_amount: Decimal
     created_at: datetime
+    vehicle: VehicleSummary | None = None
+    customer: CustomerSummary | None = None

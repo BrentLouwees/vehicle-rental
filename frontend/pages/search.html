@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Search Vehicles — DriveEasy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/css/responsive.css" />
 </head>
@@ -139,7 +142,16 @@
         <!-- ── RESULTS AREA ────────────────────────────── -->
         <section aria-label="Search results">
           <div class="results-header">
-            <span class="results-count" id="results-count" aria-live="polite">Loading...</span>
+            <span class="results-count text-muted" id="results-count" aria-live="polite">Loading...</span>
+            <div style="display:flex;align-items:center;gap:var(--spacing-sm);">
+              <label for="sort-select">Sort by:</label>
+              <select id="sort-select" style="min-width:160px;">
+                <option value="default">Default</option>
+                <option value="price_asc">Price: Low to High</option>
+                <option value="price_desc">Price: High to Low</option>
+                <option value="availability">Availability</option>
+              </select>
+            </div>
           </div>
 
           <div id="vehicles-grid">

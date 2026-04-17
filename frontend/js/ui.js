@@ -155,6 +155,18 @@ function clearAllFieldErrors(formEl) {
   });
 }
 
+/* ── Vehicle Status Badge ───────────────────────────────── */
+
+function renderVehicleStatusBadge(status) {
+  const map = {
+    available:   { cls: 'badge-available',   label: 'Available' },
+    rented:      { cls: 'badge-rented',      label: 'Rented' },
+    maintenance: { cls: 'badge-maintenance', label: 'Maintenance' },
+  };
+  const s = map[status] || { cls: '', label: status };
+  return `<span class="vehicle-status-badge ${s.cls}">${escapeHtml(s.label)}</span>`;
+}
+
 /* ── Vehicle Card ────────────────────────────────────────── */
 
 /**
@@ -183,6 +195,7 @@ function renderVehicleCard(vehicle) {
       <div class="card-body">
         <div class="card-meta">
           <span class="badge badge-type">${escapeHtml(capitalize(vehicle.type || 'vehicle'))}</span>
+          ${renderVehicleStatusBadge(vehicle.status || 'available')}
           ${rating}
         </div>
         <h3 class="card-title">${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.model)}

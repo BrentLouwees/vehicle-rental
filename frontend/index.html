@@ -65,7 +65,13 @@
   <main>
     <!-- ── HERO ──────────────────────────────────────────── -->
     <section class="hero" aria-labelledby="hero-heading">
-      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-carousel" aria-hidden="true">
+        <div class="hero-slide active" style="background-image:url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1800&q=80')"></div>
+        <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=1800&q=80')"></div>
+        <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1800&q=80')"></div>
+        <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1800&q=80')"></div>
+        <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1611241443609-2bf3a0624f67?auto=format&fit=crop&w=1800&q=80')"></div>
+      </div>
       <div class="hero-overlay" aria-hidden="true"></div>
       <div class="container">
         <p class="hero-eyebrow">Car &amp; Motorcycle Rental</p>
@@ -105,6 +111,13 @@
             Search Vehicles
           </button>
         </form>
+      </div>
+      <div class="hero-dots" aria-hidden="true">
+        <button class="hero-dot active" type="button" aria-label="Slide 1"></button>
+        <button class="hero-dot" type="button" aria-label="Slide 2"></button>
+        <button class="hero-dot" type="button" aria-label="Slide 3"></button>
+        <button class="hero-dot" type="button" aria-label="Slide 4"></button>
+        <button class="hero-dot" type="button" aria-label="Slide 5"></button>
       </div>
     </section>
 
@@ -193,6 +206,24 @@
       </div>
     </div>
   </footer>
+
+  <!-- Hero carousel -->
+  <script>
+  (function() {
+    var slides = document.querySelectorAll('.hero-slide');
+    var dots   = document.querySelectorAll('.hero-dot');
+    var current = 0;
+    function goTo(n) {
+      slides[current].classList.remove('active');
+      dots[current].classList.remove('active');
+      current = (n + slides.length) % slides.length;
+      slides[current].classList.add('active');
+      dots[current].classList.add('active');
+    }
+    dots.forEach(function(dot, i) { dot.addEventListener('click', function() { goTo(i); }); });
+    setInterval(function() { goTo(current + 1); }, 5000);
+  })();
+  </script>
 
   <!-- Scripts — load order matters -->
   <script src="/js/utils.js"></script>
